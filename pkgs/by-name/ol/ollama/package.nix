@@ -137,17 +137,17 @@ let
 in
 goBuild (finalAttrs: {
   pname = "ollama";
-  # don't forget to invalidate all hashes each update
-  version = "0.15.4";
+  version = "0.17.4";
 
   src = fetchFromGitHub {
     owner = "ollama";
     repo = "ollama";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-5dkikrp7jVGnfFwiGkbsGsRnrsS0zcZzWQ7shOn3alw=";
+    hash = "sha256-9yJ8Jbgrgiz/Pr6Se398DLkk1U2Lf5DDUi+tpEIjAaI=";
   };
 
-  vendorHash = "sha256-WdHAjCD20eLj0d9v1K6VYP8vJ+IZ8BEZ3CciYLLMtxc=";
+  vendorHash = "sha256-Lc1Ktdqtv2VhJQssk8K1UOimeEjVNvDWePE9WkamCos=";
+  proxyVendor = true;
 
   env =
     lib.optionalAttrs enableRocm {

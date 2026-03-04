@@ -464,7 +464,7 @@ let
             Whether to enable or disable lingering for this user.  Without
             lingering, user units will not be started until the user logs in,
             and may be stopped on logout depending on the settings in
-            `logind.conf`.
+            {file}`logind.conf`.
 
             By default, NixOS will not manage lingering, new users will default
             to not lingering, and lingering can be configured imperatively using
@@ -1115,14 +1115,19 @@ in
             -> !cfg.allowNoPasswordLogin
             -> any id (
               mapAttrsToList (
-                name: cfg:
-                (name == "root" || cfg.group == "wheel" || elem "wheel" cfg.extraGroups)
+                name: user:
+                (
+                  name == "root"
+                  || user.group == "wheel"
+                  || elem "wheel" user.extraGroups
+                  || elem name (cfg.groups.wheel.members or [ ])
+                )
                 && (
-                  allowsLogin cfg.hashedPassword
-                  || cfg.password != null
-                  || cfg.hashedPasswordFile != null
-                  || cfg.openssh.authorizedKeys.keys != [ ]
-                  || cfg.openssh.authorizedKeys.keyFiles != [ ]
+                  allowsLogin user.hashedPassword
+                  || user.password != null
+                  || user.hashedPasswordFile != null
+                  || user.openssh.authorizedKeys.keys != [ ]
+                  || user.openssh.authorizedKeys.keyFiles != [ ]
                 )
               ) cfg.users
               ++ [
